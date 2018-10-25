@@ -5,5 +5,16 @@
   "main": "server.js",
   "repository": "https://github.com/Squishy123/signal.git",
   "author": "Christian Wang <christian.gnaw@gmail.com>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "hapi": "^17.6.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4"
+  },
+  "scripts": {
+    "devstart": "nodemon server/main.js"
+  }
 }
