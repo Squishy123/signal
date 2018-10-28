@@ -7,7 +7,13 @@
   "author": "Christian Wang <christian.gnaw@gmail.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "hapi": "^17.6.0"
+    "bcrypt": "^3.0.2",
+    "boom": "^7.2.0",
+    "dotenv": "^6.1.0",
+    "hapi": "^17.6.0",
+    "hapi-auth-jwt": "^4.0.0",
+    "joi": "^14.0.1",
+    "mongoose": "^5.3.7"
   },
   "devDependencies": {
     "chai": "^4.2.0",
