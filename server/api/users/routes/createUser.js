@@ -17,12 +17,17 @@ const verifyUniqueUser = require('../util/userFunctions').verifyUniqueUser;
 const createToken = require('../util/token');
 
 //Hashes a password with a level 10 salt
-function hashPassword(password, cb) {
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-            return cb(err, hash);
+async function hashPassword(password) {
+    hashed = await new Promise((resolve, reject) => {
+        bcrypt.genSalt(10, (err, salt) => {
+            if (err) reject(err)
+            bcrypt.hash(password, salt, (err, hash) => {
+                if (err) reject(err);
+                resolve(hash);
+            });
         });
     });
+    return hashed;
 }
 
 //Create a new user route
@@ -33,27 +38,25 @@ module.exports = {
         auth: false,
         //verify user is unique before passing to handler
         pre: [{ method: verifyUniqueUser }],
-        handler: (req, res) => {
+        handler: async (req, h) => {
             let user = new User();
             user.email = req.payload.email;
             user.username = req.payload.username;
             user.admin = false;
 
-            hashPassword(req.payload.password, (err, hash) => {
-                if (err) throw Boom.badRequest(err);
-
+            try {
+                hash = await hashPassword(req.payload.password);
                 user.password = hash;
-                user.save((err, user) => {
-                    if (err) throw Boom.badRequest(err);
-
-                    //if user is saved successfully issue a JWT
-                    res({ idToken: createToken(user) }).code(201);
-                });
-            });
+                await user.save();
+            } catch (err) {
+                return Boom.badRequest(err);
+            }
+            //if user is saved successfully issue a JWT
+            return { idToken: createToken(user) };
+        },
+        //validate the payload against the Joi schema
+        validate: {
+            payload: createUserSchema
         }
-    },
-    //validate the payload against the Joi schema
-    validate: {
-        payload: createUserSchema
     }
 }
