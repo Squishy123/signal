@@ -21,11 +21,8 @@ module.exports = {
         //verify user credentials
         pre: [{ method: verifyCredentials, assign: 'user'}],
         handler: (req, h) => {
+            console.log("Creating token")
            return {idToken: createToken(req.pre.user)};
-        },
-        //validate the payload against the Joi schema
-        validate: {
-            payload: authenticateUserSchema
         }
     }
 }

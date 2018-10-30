@@ -1,6 +1,9 @@
 //http error objects
 const Boom = require('boom');
 
+//bcrypt 
+const bcrypt = require('bcrypt');
+
 //user model
 const User = require('../model/user');
 
@@ -37,12 +40,11 @@ async function verifyCredentials(req, h) {
                 { username: req.payload.username }
             ]
         });
-
         if(!user) 
             return Boom.badRequest('Incorrect username or email!');
-
-        let valid = await bcrypt.compare(req.payload.password, user.password)
-
+            
+        let valid = await bcrypt.compare(req.payload.password, user.password);
+        
         //return null if the user does not exist or if credentials are wrong
         if (!valid)
             return Boom.badRequest('Incorrect password!');
