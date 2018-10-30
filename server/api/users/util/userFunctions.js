@@ -67,7 +67,7 @@ async function verifyAdmin(req, h) {
         if(!user) 
             return Boom.badRequest('User does not exist!')
         
-        if(user.admin == 'true')
+        if(user.scope == 'admin')
             return true;
         else 
             return false;

@@ -42,7 +42,7 @@ module.exports = {
             let user = new User();
             user.email = req.payload.email;
             user.username = req.payload.username;
-            user.admin = false;
+            user.scope = 'client';
 
             try {
                 hash = await hashPassword(req.payload.password);

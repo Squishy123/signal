@@ -13,7 +13,6 @@ module.exports = {
         pre: [{method: verifyAdmin, assign: 'admin'}],
         //find all the users, deselect password and version and return it
         handler: async (req, h) => {
-        console.log(req.pre.admin)
         if(req.pre.admin)
             try {
                 users = await User.find().select('-password -__v');
