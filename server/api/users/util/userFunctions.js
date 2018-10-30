@@ -29,21 +29,25 @@ async function verifyUniqueUser(req, h) {
 }
 
 //check if a user's credentials are correct
-async function validateUserCreds(user) {
+async function verifyCredentials(req, h) {
     try {
-        let userQuery = await User.findOne({
-            $and: [
-                { email: user.email },
-                { username: user.username },
-                { password: user.password }
+        let user = await User.findOne({
+            $or: [
+                { email: req.payload.email },
+                { username: req.payload.username }
             ]
         });
+
+        if(!user) 
+            return Boom.badRequest('Incorrect username or email!');
+
+        let valid = await bcrypt.compare(req.payload.password, user.password)
+
         //return null if the user does not exist or if credentials are wrong
-        if (!userQuery)
-            return null;
+        if (!valid)
+            return Boom.badRequest('Incorrect password!');
         //return the user if the user credentials are correct
-        else
-            return user;
+        return user;
     } catch (err) {
         //return err if something goes wrong
         return err;
@@ -52,5 +56,5 @@ async function validateUserCreds(user) {
 
 module.exports = {
     verifyUniqueUser: verifyUniqueUser,
-    validateUserCreds: validateUserCreds
+    verifyCredentials: verifyCredentials
 }

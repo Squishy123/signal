@@ -1,12 +1,15 @@
 const userFunctions = require('../api/users/util/userFunctions');
 
 async function validate(user) {
+    /*
     try {
         let userQuery = await userFunctions.validateUserCreds(user);
         return (userQuery) ? true : false;
     } catch (err) {
         return(err);
     }
+    */
+   return user;
 }
 
 const configureAuth = {
