@@ -7,6 +7,9 @@ const bcrypt = require('bcrypt');
 //user model
 const User = require('../model/user');
 
+//jwt
+const jwt = require('jsonwebtoken');
+
 //verifies if a user object is unique 
 async function verifyUniqueUser(req, h) {
     try {
@@ -52,11 +55,30 @@ async function verifyCredentials(req, h) {
         return user;
     } catch (err) {
         //return err if something goes wrong
-        return err;
+        return Boom.badRequest(err);
+    }
+}
+
+async function verifyAdmin(req, h) {
+    try {
+        let decoded = await jwt.verify(req.headers.access_token, process.env.SECRET);
+        let user = await User.findOne(decoded._id);
+
+        if(!user) 
+            return Boom.badRequest('User does not exist!')
+        
+        if(user.admin == 'true')
+            return true;
+        else 
+            return false;
+
+    } catch(err) {
+        return Boom.badRequest(err);
     }
 }
 
 module.exports = {
     verifyUniqueUser: verifyUniqueUser,
-    verifyCredentials: verifyCredentials
+    verifyCredentials: verifyCredentials,
+    verifyAdmin: verifyAdmin
 }
