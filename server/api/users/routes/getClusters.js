@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 const verifyAccessToken = require('../util/userFunctions').verifyAccessToken;
 
 //lists all of a user's clusters
+//reqs: access_token: required
 module.exports = {
     method: 'GET',
     path: '/api/users/clusters',

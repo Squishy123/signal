@@ -31,6 +31,7 @@ async function hashPassword(password) {
 }
 
 //Create a new user route
+//req: username: required, email: required, password: required
 module.exports = {
     method: 'POST',
     path: '/api/users',

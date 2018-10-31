@@ -11,6 +11,7 @@ const verifyCredentials = require('../util/userFunctions').verifyCredentials;
 const createToken = require('../util/token');
 
 //authenticate a user
+//reqs: username: required, email: required, password: required
 module.exports = {
     method: 'POST',
     path: '/api/users/authenticate',

@@ -6,6 +6,8 @@ const User = require('../model/user');
 
 const verifyAdmin = require('../util/userFunctions').verifyAdmin;
 
+//gets a list of users
+//reqs: access_token: required
 module.exports = {
     method: 'GET',
     path: '/api/users',

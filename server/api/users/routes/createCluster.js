@@ -10,7 +10,8 @@ const mongoose = require('mongoose');
 //unique user verification
 const verifyAccessToken = require('../util/userFunctions').verifyAccessToken;
 
-//authenticate a user
+//adds/registers a new cluster to a user
+//reqs: access_token: required, name: optional, cluster_id: optional
 module.exports = {
     method: 'POST',
     path: '/api/users/clusters',
@@ -33,7 +34,8 @@ module.exports = {
                     cluster = await Cluster.findOne(mongoose.Types.ObjectId(req.payload.cluster_id));
                 } else { //if theres an existing cluster to add
                     cluster = new Cluster();
-                    cluster.name = req.payload.name;
+                    if(req.payload.name)
+                        cluster.name = req.payload.name;
                 }
                 //add user ref to cluster
                 cluster.users.push(user._id);
