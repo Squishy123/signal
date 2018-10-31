@@ -4,6 +4,9 @@ const Boom = require('boom');
 //bcrypt 
 const bcrypt = require('bcrypt');
 
+//mongoose
+const mongoose = require('mongoose');
+
 //user model
 const User = require('../model/user');
 
@@ -59,10 +62,25 @@ async function verifyCredentials(req, h) {
     }
 }
 
+async function verifyAccessToken(req, h) {
+    try {
+        let decoded = await jwt.verify(req.headers.access_token, process.env.SECRET);
+        let user = await User.findOne(mongoose.Types.ObjectId(decoded.id));
+
+        if(!user) 
+            return Boom.badRequest('User does not exist!')
+        
+       return user;
+
+    } catch(err) {
+        return Boom.badRequest(err);
+    }
+}
+
 async function verifyAdmin(req, h) {
     try {
         let decoded = await jwt.verify(req.headers.access_token, process.env.SECRET);
-        let user = await User.findOne(decoded._id);
+        let user = await User.findOne(mongoose.Types.ObjectId(decoded.id));
 
         if(!user) 
             return Boom.badRequest('User does not exist!')
@@ -80,5 +98,6 @@ async function verifyAdmin(req, h) {
 module.exports = {
     verifyUniqueUser: verifyUniqueUser,
     verifyCredentials: verifyCredentials,
+    verifyAccessToken: verifyAccessToken,
     verifyAdmin: verifyAdmin
 }

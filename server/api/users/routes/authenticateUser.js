@@ -1,9 +1,6 @@
 //http error objects
 const Boom = require('boom');
 
-//user model
-const User = require('../model/user');
-
 //default createUser schema
 const authenticateUserSchema = require('../schemas/authenticateUser');
 
@@ -22,7 +19,7 @@ module.exports = {
         pre: [{ method: verifyCredentials, assign: 'user'}],
         handler: (req, h) => {
             console.log("Creating token")
-           return {idToken: createToken(req.pre.user)};
+           return {id_token: createToken(req.pre.user)};
         }
     }
 }

@@ -52,7 +52,7 @@ module.exports = {
                 return Boom.badRequest(err);
             }
             //if user is saved successfully issue a JWT
-            return { idToken: createToken(user) };
+            return { id_token: createToken(user) };
         },
         //validate the payload against the Joi schema
         validate: {
